@@ -20,7 +20,7 @@ kernel_thread(int (*fn)(void *), void *arg, uint32_t clone_flags)
 
 给中断帧分配完空间后，就需要构造新进程的中断帧，具体过程是：首先给tf进行清零初始化，并设置中断帧的代码段（tf.tf\_cs）和数据段(tf.tf\_ds/tf\_es/tf\_ss)为内核空间的段（KERNEL\_CS/KERNEL\_DS），这实际上也说明了initproc内核线程在内核空间中执行。而initproc内核线程从哪里开始执行呢？tf.tf\_eip的指出了是kernel\_thread\_entry（位于kern/process/entry.S中），kernel\_thread\_entry是entry.S中实现的汇编函数，它做的事情很简单：
 
-```x86asm
+```
 kernel_thread_entry: # void kernel_thread(void)
 pushl %edx # push arg
 call *%ebx # call fn
